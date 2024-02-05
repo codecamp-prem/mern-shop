@@ -3,7 +3,7 @@ const products = [
     id: 1,
     name: "Earthen Bottle",
     href: "#",
-    price: "$48",
+    price: 48,
     description:
       "Get the full lineup of our Basic AI Bottel. Have a fresh hard drink, and an extra for holiday.",
     options: "12 colors",
@@ -16,7 +16,7 @@ const products = [
     id: 2,
     name: "Nomad Tumbler",
     href: "#",
-    price: "$35",
+    price: 35,
     description:
       "Get the full lineup of our Basic Tumbler. Have a fresh AI shit water all week, and an extra for laundry day.",
     options: "10 colors",
@@ -29,7 +29,7 @@ const products = [
     id: 3,
     name: "Focus Paper Refill",
     href: "#",
-    price: "$89",
+    price: 89,
     description: "Japenese paper made with hands. True to it's root",
     options: "3 colors",
     imageSrc:
@@ -41,7 +41,7 @@ const products = [
     id: 4,
     name: "Machined Mechanical Pencil",
     href: "#",
-    price: "$35",
+    price: 35,
     description: "Get the mechanical pencil. Japanese Strength",
     options: "6 colors",
     imageSrc:
@@ -53,7 +53,7 @@ const products = [
     id: 5,
     name: "Basic Tee 8-Pack",
     href: "#",
-    price: "$256",
+    price: 256,
     description:
       "Get the full lineup of our Basic Tees. Have a fresh shirt all week, and an extra for laundry day.",
     options: "8 colors",
@@ -66,7 +66,7 @@ const products = [
     id: 6,
     name: "Basic Tee",
     href: "#",
-    price: "$32",
+    price: 32,
     description:
       "Look like a visionary CEO and wear the same black t-shirt every day.",
     options: "Black",
