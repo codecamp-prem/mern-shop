@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { CiShoppingCart } from "react-icons/ci";
-import siteLogo from "../assets/react.svg";
+import siteLogo from "../assets/logo.png";
 import useWindowSize from "../hooks/useWindowSize";
 import "./header.css";
 
@@ -25,7 +25,11 @@ const Header = () => {
       <div className="flex items-center justify-between">
         {/* logo & menu */}
         <div className="flex items-center space-x-20">
-          <img src={siteLogo} alt="logo" />
+          <img
+            src={siteLogo}
+            alt="logo"
+            className="bg-veryDarkViolet rounded-xl"
+          />
           {/* <div className="hidden space-x-8 font-bold lg:flex">
             <a
               href="#"
