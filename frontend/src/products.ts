@@ -1,6 +1,7 @@
 const products = [
   {
     id: 1,
+    product_id: "ffa85b5a-6aca-42d9-b738-59e21d202017",
     name: "Earthen Bottle",
     href: "#",
     price: 48,
@@ -16,6 +17,7 @@ const products = [
   },
   {
     id: 2,
+    product_id: "ffa85b5a-6aca-42d9-b738-59e21d202018",
     name: "Nomad Tumbler",
     href: "#",
     price: 35,
@@ -31,6 +33,7 @@ const products = [
   },
   {
     id: 3,
+    product_id: "ffa85b5a-6aca-42d9-b738-59e21d202019",
     name: "Focus Paper Refill",
     href: "#",
     price: 89,
@@ -45,6 +48,7 @@ const products = [
   },
   {
     id: 4,
+    product_id: "ffa85b5a-6aca-42d9-b738-59e21d202020",
     name: "Machined Mechanical Pencil",
     href: "#",
     price: 35,
@@ -59,6 +63,7 @@ const products = [
   },
   {
     id: 5,
+    product_id: "ffa85b5a-6aca-42d9-b738-59e21d202021",
     name: "Basic Tee 8-Pack",
     href: "#",
     price: 256,
@@ -74,6 +79,7 @@ const products = [
   },
   {
     id: 6,
+    product_id: "ffa85b5a-6aca-42d9-b738-59e21d202022",
     name: "Basic Tee",
     href: "#",
     price: 32,
