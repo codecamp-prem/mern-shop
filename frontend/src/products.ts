@@ -11,6 +11,8 @@ const products = [
       "https://tailwindui.com/img/ecommerce-images/category-page-04-image-card-01.jpg",
     imageAlt:
       "Tall slender porcelain bottle with natural clay textured body and cork stopper.",
+    rating: 3.5,
+    numReviews: 1120,
   },
   {
     id: 2,
@@ -24,6 +26,8 @@ const products = [
       "https://tailwindui.com/img/ecommerce-images/category-page-04-image-card-02.jpg",
     imageAlt:
       "Olive drab green insulated bottle with flared screw lid and flat top.",
+    rating: 2.5,
+    numReviews: 10,
   },
   {
     id: 3,
@@ -36,6 +40,8 @@ const products = [
       "https://tailwindui.com/img/ecommerce-images/category-page-04-image-card-03.jpg",
     imageAlt:
       "Person using a pen to cross a task off a productivity paper card.",
+    rating: 3.5,
+    numReviews: 112,
   },
   {
     id: 4,
@@ -48,6 +54,8 @@ const products = [
       "https://tailwindui.com/img/ecommerce-images/category-page-04-image-card-04.jpg",
     imageAlt:
       "Hand holding black machined steel mechanical pencil with brass tip and top.",
+    rating: 5,
+    numReviews: 9,
   },
   {
     id: 5,
@@ -61,6 +69,8 @@ const products = [
       "https://tailwindui.com/img/ecommerce-images/category-page-02-image-card-01.jpg",
     imageAlt:
       "Eight shirts arranged on table in black, olive, grey, blue, white, red, mustard, and green.",
+    rating: 4.5,
+    numReviews: 36,
   },
   {
     id: 6,
@@ -73,6 +83,8 @@ const products = [
     imageSrc:
       "https://tailwindui.com/img/ecommerce-images/category-page-02-image-card-02.jpg",
     imageAlt: "Front of plain black t-shirt.",
+    rating: 4,
+    numReviews: 12,
   },
 ];
 
