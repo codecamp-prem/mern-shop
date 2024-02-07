@@ -21,10 +21,12 @@ router.get(
     const product = await prisma.product.findUnique({
       where: { id: req.params.id },
     });
-    if (!product) {
-      return res.json(404).json({ message: "Product not found" });
+    if (product) {
+      return res.json(product);
+    } else {
+      res.status(404);
+      throw new Error("Resource not Found"); //this custom error will show as message value.
     }
-    res.json(product);
   })
 );
 
