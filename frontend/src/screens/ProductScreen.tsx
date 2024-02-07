@@ -30,8 +30,8 @@ const ProductScreen = () => {
         <div className="flex flex-col md:flex-row md:space-x-2 lg:space-x-4 m-2 space-y-3 md:space-y-0">
           <div className="w-full md:w-[40%]">
             <img
-              src={product.imageSrc}
-              alt={product.imageSrc}
+              src={product.image}
+              alt={product.image.split("/")[2]}
               className="w-full rounded-xl m-auto pointer-events-none transition duration-300 hover:cursor-pointer hover:shadow-xl"
             />
           </div>
@@ -45,7 +45,12 @@ const ProductScreen = () => {
 
             <div className="">
               <div>Price: ${product.price}</div>
-              <div>Status: Out of stock</div>
+              <div>
+                Status:{" "}
+                {product.countInStock > 0
+                  ? `${product.countInStock} in Stock`
+                  : `Out of Stock`}
+              </div>
             </div>
             <div>
               <button className="py-2 px-4 rounded-md border bg-gray-200 hover:bg-cyan">
