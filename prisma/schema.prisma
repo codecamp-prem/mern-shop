@@ -1,0 +1,133 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./mernShopSql.db"
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model User {
+  id             String      @id @default(cuid())
+  name           String?
+  email          String?     @unique
+  emailVerified  DateTime?
+  hashedPassword String?
+  image          String?
+  accounts       Account[]
+  sessions       Session[]
+  admins         AdminUser[]
+  reviews        Review[]
+  orders         Order[]
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model AdminUser {
+  id       Int       @id @default(autoincrement())
+  userId   String
+  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  products Product[]
+}
+
+model Product {
+  id           String    @id @default(cuid())
+  name         String
+  image        String
+  brand        String
+  category     String
+  description  String
+  rating       Int       @default(0)
+  numReviews   Int       @default(0)
+  price        Int       @default(0)
+  countInStock Int       @default(0)
+  createdBy    Int
+  adminUser    AdminUser @relation(fields: [createdBy], references: [id])
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  reviews      Review[]
+  orders       Order[]
+}
+
+model Review {
+  id            Int      @id @default(autoincrement())
+  name          String
+  rating        Int
+  comment       String
+  reviewBy      String
+  reviewUser    User     @relation(fields: [reviewBy], references: [id])
+  reviewProduct String
+  product       Product  @relation(fields: [reviewProduct], references: [id])
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model Order {
+  id             String        @id @default(cuid())
+  orderByUserId  String
+  orderUser      User          @relation(fields: [orderByUserId], references: [id])
+  orderProductId String
+  orderProduct   Product       @relation(fields: [orderProductId], references: [id])
+  orderDetails   OrderDetail[]
+}
+
+model OrderDetail {
+  id                        Int       @id @default(autoincrement())
+  address                   String
+  city                      String
+  postalCode                String
+  country                   String
+  orderId                   String
+  orderProduct              Order     @relation(fields: [orderId], references: [id])
+  quantity                  Int
+  productPrice              Float     @default(0.0)
+  taxPrice                  Float     @default(0.0)
+  shippingPrice             Float     @default(0.0)
+  totalPrice                Float     @default(0.0)
+  paymentMethod             String
+  paymentResultId           String?
+  paymentResultStatus       String?
+  paymentResultUpdate_time  String?
+  paymentResultEmailAddress String?
+  isPaid                    Boolean   @default(false)
+  paidAt                    DateTime?
+  isDelivered               Boolean   @default(false)
+  deliveredAt               DateTime?
+  createdAt                 DateTime  @default(now())
+}
