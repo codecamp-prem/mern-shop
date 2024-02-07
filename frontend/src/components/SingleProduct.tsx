@@ -9,7 +9,7 @@ export type ProductProps = {
   price: number;
   description: string;
   options: string;
-  imageSrc: string;
+  image: string;
   imageAlt: string;
   rating: number;
   numReviews: number;
@@ -20,8 +20,8 @@ const SingleProduct = ({ ...product }: ProductProps) => {
       <div className="aspect-h-4 aspect-w-3 bg-gray-200 sm:aspect-none group-hover:opacity-75 sm:h-96">
         <Link to={`/product/${product.product_id}`}>
           <img
-            src={product.imageSrc}
-            alt={product.imageAlt}
+            src={product.image}
+            alt={product.image}
             className="h-full w-full object-cover object-center sm:h-full sm:w-full"
           />
         </Link>
