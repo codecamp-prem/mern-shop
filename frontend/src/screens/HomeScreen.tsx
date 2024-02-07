@@ -1,9 +1,9 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import SingleProduct from "../components/SingleProduct";
+import SingleProduct, { ProductProps } from "../components/SingleProduct";
 
 const HomeScreen = () => {
-  const [products, setProducts] = useState([]);
+  const [products, setProducts] = useState<ProductProps[]>([]);
   useEffect(() => {
     const fetchProducts = async () => {
       const { data } = await axios.get("/api/products");
@@ -23,7 +23,7 @@ const HomeScreen = () => {
           <h2 className="sr-only sm:not-sr-only">Latest Products</h2>
 
           <div className="grid grid-cols-1 gap-y-4 sm:grid-cols-2 sm:gap-x-6 sm:gap-y-10 lg:grid-cols-3 lg:gap-x-8">
-            {products.map((product) => (
+            {products.map((product: ProductProps) => (
               <SingleProduct {...product} key={product.id} />
             ))}
           </div>

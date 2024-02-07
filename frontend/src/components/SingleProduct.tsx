@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import Rating from "./Rating";
 
-type ProductProps = {
+export type ProductProps = {
   id: number;
   product_id: string;
   name: string;
