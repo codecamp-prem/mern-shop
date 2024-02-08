@@ -2,7 +2,7 @@ import SingleProduct, { ProductProps } from "../components/SingleProduct";
 import { useGetProductsQuery } from "../store/slices/productsApiSlice";
 
 const HomeScreen = () => {
-  const { data: products, isLoading, error } = useGetProductsQuery({});
+  const { data: products, isLoading, error } = useGetProductsQuery("");
 
   return (
     <>
