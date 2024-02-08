@@ -9,6 +9,7 @@ import {
 } from "react-router-dom";
 import App from "./App.tsx";
 import "./index.css";
+import CartScreen from "./screens/CartScreen.tsx";
 import HomeScreen from "./screens/HomeScreen.tsx";
 import ProductScreen from "./screens/ProductScreen.tsx";
 import { store } from "./store/store.ts";
@@ -18,6 +19,7 @@ const router = createBrowserRouter(
     <Route path="/" element={<App />}>
       <Route index={true} path="/" element={<HomeScreen />} />
       <Route path="/product/:id" element={<ProductScreen />} />
+      <Route path="/cart" element={<CartScreen />} />
     </Route>
   )
 );

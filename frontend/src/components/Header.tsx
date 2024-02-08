@@ -50,9 +50,11 @@ const Header = () => {
           <div className="hover:text-veryDarkViolet relative">
             <CiShoppingCart className="w-full h-14" />
             {cartItems.length > 0 && (
-              <span className="absolute top-[15px] left-[15px] p-1 text-xs text-black bg-yellow-400 rounded-lg">
-                {cartItems.reduce((a, c) => a + c.productQty, 0)}
-              </span>
+              <Link to="/cart" className="absolute -mt-6 ml-4">
+                <span className="p-1 text-xs text-black bg-yellow-400 rounded-lg">
+                  {cartItems.reduce((a, c) => a + c.productQty, 0)}
+                </span>
+              </Link>
             )}
           </div>
           <div className="hover:text-veryDarkViolet">
@@ -87,7 +89,7 @@ const Header = () => {
           {/* <a href="#" className="w-full text-center">
             Products
           </a> */}
-          <a href="#" className="w-full text-center ">
+          <Link to="/cart" className="w-full text-center ">
             Your Cart{" "}
             <div className="relative">
               <CiShoppingCart className="w-full h-14" />
@@ -97,7 +99,7 @@ const Header = () => {
                 </span>
               )}
             </div>
-          </a>
+          </Link>
           <Link
             to="/login"
             className="w-full text-center pt-6 border-t border-gray-400"
