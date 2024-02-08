@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { CiShoppingCart } from "react-icons/ci";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import siteLogo from "../assets/logo.png";
 import useWindowSize from "../hooks/useWindowSize";
@@ -19,6 +20,8 @@ const Header = () => {
   const handleMobileMenuOption = () => {
     setIsMobileMenu(!isMobileMenu);
   };
+
+  const { cartItems } = useSelector((state) => state.cart);
 
   return (
     <nav className="relative container mx-auto p-6">
@@ -44,8 +47,13 @@ const Header = () => {
         </div>
         {/* right button menu */}
         <div className="rightButtonMenu">
-          <div className="hover:text-veryDarkViolet">
-            <CiShoppingCart className="w-full h-10" />
+          <div className="hover:text-veryDarkViolet relative">
+            <CiShoppingCart className="w-full h-14" />
+            {cartItems.length > 0 && (
+              <span className="absolute top-[15px] left-[15px] p-1 text-xs text-black bg-yellow-400 rounded-lg">
+                {cartItems.reduce((a, c) => a + c.productQty, 0)}
+              </span>
+            )}
           </div>
           <div className="hover:text-veryDarkViolet">
             <Link to="/login">Login</Link>
@@ -80,7 +88,15 @@ const Header = () => {
             Products
           </a> */}
           <a href="#" className="w-full text-center ">
-            Your Cart <CiShoppingCart className="w-full h-14" />
+            Your Cart{" "}
+            <div className="relative">
+              <CiShoppingCart className="w-full h-14" />
+              {cartItems.length > 0 && (
+                <span className="absolute -mt-8 p-1 ml- text-xs text-black bg-yellow-400 rounded-lg">
+                  {cartItems.reduce((a, c) => a + c.productQty, 0)}
+                </span>
+              )}
+            </div>
           </a>
           <Link
             to="/login"
