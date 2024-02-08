@@ -1,5 +1,6 @@
 import { Link, useParams } from "react-router-dom";
 import Loader from "../components/Loader";
+import Message from "../components/Message";
 import Rating from "../components/Rating";
 import { useGetProductByIdQuery } from "../store/slices/productsApiSlice";
 
@@ -24,7 +25,7 @@ const ProductScreen = () => {
       {isLoading ? (
         <Loader />
       ) : error ? (
-        <div>{error?.data?.message || error.error}</div>
+        <Message variant="info">{error?.data?.message || error.error}</Message>
       ) : (
         <div className="flex flex-col relative container mx-auto p-6">
           <div className="">
