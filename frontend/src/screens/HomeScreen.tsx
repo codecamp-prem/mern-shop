@@ -1,3 +1,4 @@
+import Loader from "../components/Loader";
 import SingleProduct, { ProductProps } from "../components/SingleProduct";
 import { useGetProductsQuery } from "../store/slices/productsApiSlice";
 
@@ -7,7 +8,7 @@ const HomeScreen = () => {
   return (
     <>
       {isLoading ? (
-        <h2>loading... 🇳🇵🔬 🇳🇵🔬 🇳🇵🔬</h2>
+        <Loader />
       ) : error ? (
         <div>{error?.data?.message || error.error}</div>
       ) : (

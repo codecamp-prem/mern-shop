@@ -1,4 +1,5 @@
 import { Link, useParams } from "react-router-dom";
+import Loader from "../components/Loader";
 import Rating from "../components/Rating";
 import { useGetProductByIdQuery } from "../store/slices/productsApiSlice";
 
@@ -21,7 +22,7 @@ const ProductScreen = () => {
   return (
     <>
       {isLoading ? (
-        <h2>loading... 🇳🇵🔬 🇳🇵🔬 🇳🇵🔬</h2>
+        <Loader />
       ) : error ? (
         <div>{error?.data?.message || error.error}</div>
       ) : (
