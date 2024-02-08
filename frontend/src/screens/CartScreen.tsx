@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import Message from "../components/Message";
 import Rating from "../components/Rating";
-import { addToCart } from "../store/slices/cartSlice";
+import { addToCart, removeFromCart } from "../store/slices/cartSlice";
 import { addDecimals } from "../utils/cartUtils";
 
 const CartScreen = () => {
@@ -15,6 +15,13 @@ const CartScreen = () => {
   const addToCartHandler = async (product, productQty) => {
     dispatch(addToCart({ ...product, productQty }));
   };
+  const removeFromCartHandler = async (id) => {
+    dispatch(removeFromCart(id));
+  };
+  const checkoutHandler = () => {
+    navigate("/login?redirect=/shipping");
+  };
+
   return (
     <div className="bg-white">
       <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:px-0">
@@ -118,6 +125,7 @@ const CartScreen = () => {
                           <button
                             type="button"
                             className="text-sm font-medium text-indigo-600 hover:text-indigo-500"
+                            onClick={() => removeFromCartHandler(product.id)}
                           >
                             <span>Remove</span>
                           </button>
@@ -161,6 +169,7 @@ const CartScreen = () => {
                 <button
                   type="submit"
                   className="w-full rounded-md border border-transparent bg-indigo-600 px-4 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50"
+                  onClick={checkoutHandler}
                 >
                   Checkout
                 </button>
