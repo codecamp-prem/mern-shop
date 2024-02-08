@@ -1,8 +1,10 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { apiSlice } from "./slices/apiSlice";
+import cartSlice from "./slices/cartSlice";
 
 const rootReducer = combineReducers({
   [apiSlice.reducerPath]: apiSlice.reducer,
+  cart: cartSlice,
 });
 
 export const store = configureStore({
@@ -11,6 +13,3 @@ export const store = configureStore({
     getDefaultMiddleware().concat(apiSlice.middleware),
   devTools: true,
 });
-
-export type RootState = ReturnType<typeof store.getState>; // return type of function type: RootState
-export type AppDispatch = typeof store.dispatch;
