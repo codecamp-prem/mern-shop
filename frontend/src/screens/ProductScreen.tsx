@@ -1,25 +1,25 @@
-import { Link, useParams } from "react-router-dom";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import Loader from "../components/Loader";
 import Message from "../components/Message";
 import Rating from "../components/Rating";
+import { addToCart } from "../store/slices/cartSlice";
 import { useGetProductByIdQuery } from "../store/slices/productsApiSlice";
 
 const ProductScreen = () => {
-  //const [product, setProduct] = useState<ProductProps>();
   const { id: productId } = useParams();
-
-  // useEffect(() => {
-  //   const fetchProduct = async () => {
-  //     const { data } = await axios.get(`/api/products/${productId}`);
-  //     setProduct(data);
-  //   };
-  //   fetchProduct();
-  // }, [productId]);
-
-  // if (!product) {
-  //   return null;
-  // }
   const { data: product, isLoading, error } = useGetProductByIdQuery(productId);
+
+  const [productQty, setProductQty] = useState(1);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const addToCartHandler = () => {
+    dispatch(addToCart({ ...product, productQty }));
+    navigate("/cart");
+  };
+
   return (
     <>
       {isLoading ? (
@@ -58,8 +58,35 @@ const ProductScreen = () => {
                     : `Out of Stock`}
                 </div>
               </div>
-              <div>
-                <button className="py-2 px-4 rounded-md border bg-gray-200 hover:bg-cyan">
+              <div className="flex space-x-4 items-center">
+                {product.countInStock > 0 && (
+                  <>
+                    <label
+                      htmlFor="productQty"
+                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    >
+                      Quantity
+                    </label>
+                    <select
+                      id="productQty"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-auto p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      value={productQty}
+                      onChange={(e) => setProductQty(Number(e.target.value))}
+                    >
+                      {[...Array(product.countInStock).keys()].map((x) => (
+                        <option key={x + 1} value={x + 1}>
+                          {x + 1}
+                        </option>
+                      ))}
+                    </select>
+                  </>
+                )}
+                <button
+                  className="py-2 px-4 rounded-md border bg-gray-200 hover:bg-cyan"
+                  disabled={product.countInStock <= 0}
+                  type="button"
+                  onClick={addToCartHandler}
+                >
                   Add to cart
                 </button>
               </div>
