@@ -1,9 +1,9 @@
 import bcrypt from "bcrypt";
 import { Request, Response } from "express";
-import jwt from "jsonwebtoken";
 import prisma from "../../prisma/client";
 
 import asyncHandler from "../middleware/asyncHandler";
+import generateToken from "../utils/generateToken";
 
 const matchPassword = async (
   userInputPassword: string,
@@ -24,17 +24,7 @@ const authUser = asyncHandler(async (req: Request, res: Response) => {
   });
 
   if (user && (await matchPassword(password, user.hashedPassword!))) {
-    const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET!, {
-      expiresIn: "30d",
-    });
-
-    // set JWT as HTTP-only cookie
-    res.cookie("jwt", token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV != "development",
-      sameSite: "strict",
-      maxAge: 30 * 24 * 60 * 60 * 100, //30 days
-    });
+    generateToken(res, user.id);
     res.json({
       id: user.id,
       name: user.name,
@@ -46,19 +36,49 @@ const authUser = asyncHandler(async (req: Request, res: Response) => {
     throw new Error(`Invalid Email or Password`);
   }
 });
+// @desc      Logout user & clear cookie
+// @route     POST /api/users/logout
+// @access    Private
+const logoutUser = asyncHandler(async (req: Request, res: Response) => {
+  res.cookie("jwt", "", { httpOnly: true, expires: new Date(0) });
+  res.status(200).json({ message: "log out successfully!" });
+});
 
 // @desc      Register User
 // @route     POST /api/users
 // @access    Public
 const registerUser = asyncHandler(async (req: Request, res: Response) => {
-  res.send("register user");
-});
+  const { name, email, password } = req.body;
 
-// @desc      Logout user & clear cookie
-// @route     POST /api/users/logout
-// @access    Private
-const logoutUser = asyncHandler(async (req: Request, res: Response) => {
-  res.send("logout user");
+  const userExist = await prisma.user.findUnique({
+    where: { email: email },
+  });
+  if (userExist) {
+    res.status(400);
+    throw new Error("User seems to already exist. Please try to login");
+  }
+
+  const hashedPassword = await bcrypt.hash(password, 10);
+  const newUser = await prisma.user.create({
+    data: {
+      name,
+      email,
+      hashedPassword,
+    },
+  });
+  if (newUser) {
+    generateToken(res, newUser.id);
+    // user.admins.length will be 0, since we don't have this user as Admin
+    res.json({
+      id: newUser.id,
+      name: newUser.name,
+      email: newUser.email,
+      isAdmin: 0,
+    });
+  } else {
+    res.status(400);
+    throw new Error("Invalid User Data. Please try again");
+  }
 });
 
 // @desc      Get user Profile
