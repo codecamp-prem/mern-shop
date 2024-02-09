@@ -4,6 +4,7 @@ dotenv.config();
 
 import { errorHandler, notFound } from "./middleware/errorMiddleware";
 import productRoutes from "./routes/productRoutes";
+import userRoutes from "./routes/userRoutes";
 
 const port = process.env.PORT || 5000;
 
@@ -14,6 +15,7 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 app.use("/api/products", productRoutes);
+app.use("/api/users", userRoutes);
 
 /* not found and other error handler */
 app.use(notFound);
