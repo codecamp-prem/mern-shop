@@ -1,6 +1,8 @@
 import bcrypt from "bcrypt";
 import { Request, Response } from "express";
+import jwt from "jsonwebtoken";
 import prisma from "../../prisma/client";
+
 import asyncHandler from "../middleware/asyncHandler";
 
 const matchPassword = async (
@@ -21,7 +23,18 @@ const authUser = asyncHandler(async (req: Request, res: Response) => {
     },
   });
 
-  if (user && (await matchPassword(password, user.hashedPassword || ""))) {
+  if (user && (await matchPassword(password, user.hashedPassword!))) {
+    const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET!, {
+      expiresIn: "30d",
+    });
+
+    // set JWT as HTTP-only cookie
+    res.cookie("jwt", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV != "development",
+      sameSite: "strict",
+      maxAge: 30 * 24 * 60 * 60 * 100, //30 days
+    });
     res.json({
       id: user.id,
       name: user.name,
