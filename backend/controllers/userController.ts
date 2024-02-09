@@ -1,11 +1,30 @@
 import { Request, Response } from "express";
+import prisma from "../../prisma/client";
 import asyncHandler from "../middleware/asyncHandler";
 
 // @desc      Auth user & get token
 // @route     POST /api/users/login
 // @access    Public
 const authUser = asyncHandler(async (req: Request, res: Response) => {
-  res.send("auth user");
+  const { email, password } = req.body;
+  const user = await prisma.user.findUnique({
+    where: { email: email },
+    include: {
+      admins: true,
+    },
+  });
+
+  if (user) {
+    res.json({
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      isAdmin: user.admins.length,
+    });
+  } else {
+    res.status(401);
+    throw new Error(`Invalid Email or Password`);
+  }
 });
 
 // @desc      Register User
