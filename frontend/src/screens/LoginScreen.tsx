@@ -1,13 +1,41 @@
-import { FormEvent, useState } from "react";
-import { Link } from "react-router-dom";
+import { FormEvent, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import Loader from "../components/Loader";
+import { setCredentials } from "../store/slices/authSlice";
+import { useLoginMutation } from "../store/slices/usersApiSlice";
 
 const LoginScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const submitHandler = (e: FormEvent<HTMLFormElement>) => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const [login, { isLoading }] = useLoginMutation();
+
+  const { userInfo } = useSelector((state) => state.auth);
+
+  const { search } = useLocation();
+  const searchParameter = new URLSearchParams(search);
+  const redirect = searchParameter.get("redirect") || "/";
+
+  useEffect(() => {
+    if (userInfo) {
+      navigate(redirect);
+    }
+  }, [userInfo, redirect, navigate]);
+
+  const submitHandler = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("submit");
+    try {
+      const res = await login({ email, password }).unwrap();
+      dispatch(setCredentials({ ...res }));
+      navigate(redirect);
+    } catch (err) {
+      toast.error(err?.data?.message || err?.error);
+    }
   };
   return (
     <div className="bg-white">
@@ -62,7 +90,14 @@ const LoginScreen = () => {
           </div>
 
           <div className="mt-6 flex items-center justify-end gap-x-6">
-            <Link to="/signup">
+            <button
+              type="submit"
+              className="inline-flex justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+              disabled={isLoading}
+            >
+              Sign In
+            </button>
+            <Link to={redirect ? `/signup?redirect=${redirect}` : "/signup"}>
               <button
                 type="button"
                 className="text-sm font-semibold leading-6 text-gray-900"
@@ -73,13 +108,8 @@ const LoginScreen = () => {
                 </span>
               </button>
             </Link>
-            <button
-              type="submit"
-              className="inline-flex justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-            >
-              Sign In
-            </button>
           </div>
+          {isLoading && <Loader />}
         </form>
       </div>
     </div>
