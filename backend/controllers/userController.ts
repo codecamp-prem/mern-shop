@@ -1,5 +1,6 @@
 import bcrypt from "bcrypt";
 import { Request, Response } from "express";
+import jwt from "jsonwebtoken";
 import prisma from "../../prisma/client";
 
 import asyncHandler from "../middleware/asyncHandler";
@@ -18,18 +19,24 @@ const authUser = asyncHandler(async (req: Request, res: Response) => {
   const { email, password } = req.body;
   const user = await prisma.user.findUnique({
     where: { email: email },
-    include: {
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      emailVerified: true,
+      image: true,
       admins: true,
+      hashedPassword: true,
     },
   });
 
   if (user && (await matchPassword(password, user.hashedPassword!))) {
     generateToken(res, user.id);
-    res.json({
+    res.status(200).json({
       id: user.id,
       name: user.name,
       email: user.email,
-      isAdmin: user.admins.length,
+      admins: user.admins.length,
     });
   } else {
     res.status(401);
@@ -69,7 +76,7 @@ const registerUser = asyncHandler(async (req: Request, res: Response) => {
   if (newUser) {
     generateToken(res, newUser.id);
     // user.admins.length will be 0, since we don't have this user as Admin
-    res.json({
+    res.status(200).json({
       id: newUser.id,
       name: newUser.name,
       email: newUser.email,
@@ -85,14 +92,86 @@ const registerUser = asyncHandler(async (req: Request, res: Response) => {
 // @route     GET /api/users/profile
 // @access    Private
 const getUserProfile = asyncHandler(async (req: Request, res: Response) => {
-  res.send("get user Profile");
+  // Read the JWT from the cookie
+  let token = req.cookies.jwt;
+  const decoded = jwt.verify(token, process.env.JWT_SECRET!);
+
+  const user = await prisma.user.findUnique({
+    where: { id: decoded.userId },
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      emailVerified: true,
+      image: true,
+      admins: true,
+      hashedPassword: true,
+    },
+  });
+  if (user) {
+    res.status(200).json({
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      admins: user.admins.length,
+    });
+  } else {
+    res.status(404);
+    throw new Error("User Not Found!");
+  }
 });
 
 // @desc      Update user Profile
 // @route     PUT /api/users/profile
 // @access    Private
 const updateUserProfile = asyncHandler(async (req: Request, res: Response) => {
-  res.send("update user Profile");
+  // Read the JWT from the cookie
+  let token = req.cookies.jwt;
+  const decoded = jwt.verify(token, process.env.JWT_SECRET!);
+
+  const user = await prisma.user.findUnique({
+    where: { id: decoded.userId! },
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      emailVerified: true,
+      image: true,
+      admins: true,
+      hashedPassword: true,
+    },
+  });
+  if (user) {
+    /*
+    ---------TODO: Validation using Zod-------
+    user.name = req.body.name || user.name,
+    user.email = req.body.email || user.email;
+
+    if(req.body.password){
+        user.hashedPassword =  await bcrypt.hash(req.body.password, 10);
+    }
+    */
+    const updateUser = await prisma.user.update({
+      where: { id: user.id },
+      data: {
+        name: req.body.name || user.name,
+        email: req.body.email || user.email,
+        hashedPassword: req.body.password
+          ? await bcrypt.hash(req.body.password, 10)
+          : user.hashedPassword,
+      },
+    });
+
+    res.status(200).json({
+      id: updateUser.id,
+      name: updateUser.name,
+      email: updateUser.email,
+      admins: user.admins.length,
+    });
+  } else {
+    res.status(300);
+    throw new Error("Unable to Update at the moment.");
+  }
 });
 
 // @desc      Get users
