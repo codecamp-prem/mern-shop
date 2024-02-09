@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import siteLogo from "../assets/logo.png";
 import useWindowSize from "../hooks/useWindowSize";
+import ProfileCard from "./ProfileCard";
 import "./header.css";
 
 const Header = () => {
@@ -22,6 +23,7 @@ const Header = () => {
   };
 
   const { cartItems } = useSelector((state) => state.cart);
+  const { userInfo } = useSelector((state) => state.auth);
 
   return (
     <nav className="relative container mx-auto p-6">
@@ -57,12 +59,18 @@ const Header = () => {
               </Link>
             )}
           </div>
-          <div className="hover:text-veryDarkViolet">
-            <Link to="/login">Login</Link>
-          </div>
-          <Link to="/signup" className="signUp">
-            Sign Up
-          </Link>
+          {userInfo ? (
+            <ProfileCard user={userInfo} />
+          ) : (
+            <>
+              <div className="hover:text-veryDarkViolet">
+                <Link to="/login">Login</Link>
+              </div>
+              <Link to="/signup" className="signUp">
+                Sign Up
+              </Link>
+            </>
+          )}
         </div>
         {/* Hamburger Button(mobile) */}
         <div className="lg:hidden">
@@ -100,18 +108,24 @@ const Header = () => {
               )}
             </div>
           </Link>
-          <Link
-            to="/login"
-            className="w-full text-center pt-6 border-t border-gray-400"
-          >
-            Login
-          </Link>
-          <Link
-            to="/signup"
-            className="w-full text-center py-3 rounded-full bg-cyan"
-          >
-            Sign Up
-          </Link>
+          {userInfo ? (
+            <ProfileCard user={userInfo} />
+          ) : (
+            <>
+              <Link
+                to="/login"
+                className="w-full text-center pt-6 border-t border-gray-400"
+              >
+                Login
+              </Link>
+              <Link
+                to="/signup"
+                className="w-full text-center py-3 rounded-full bg-cyan"
+              >
+                Sign Up
+              </Link>
+            </>
+          )}
         </div>
       </div>
     </nav>
