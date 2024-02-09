@@ -1,7 +1,14 @@
+import bcrypt from "bcrypt";
 import { Request, Response } from "express";
 import prisma from "../../prisma/client";
 import asyncHandler from "../middleware/asyncHandler";
 
+const matchPassword = async (
+  userInputPassword: string,
+  hashedDBPassword: string
+) => {
+  return await bcrypt.compare(userInputPassword, hashedDBPassword);
+};
 // @desc      Auth user & get token
 // @route     POST /api/users/login
 // @access    Public
@@ -14,7 +21,7 @@ const authUser = asyncHandler(async (req: Request, res: Response) => {
     },
   });
 
-  if (user) {
+  if (user && (await matchPassword(password, user.hashedPassword || ""))) {
     res.json({
       id: user.id,
       name: user.name,
