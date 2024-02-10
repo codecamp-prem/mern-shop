@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Loader from "../components/Loader";
+import { loginSchema } from "../schema/schema";
 import { setCredentials } from "../store/slices/authSlice";
 import { useLoginMutation } from "../store/slices/usersApiSlice";
 
@@ -29,6 +30,16 @@ const LoginScreen = () => {
 
   const submitHandler = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const validation = loginSchema.safeParse({
+      email,
+      password,
+    });
+    if (!validation.success) {
+      validation.error.errors.map((error) => {
+        return toast.error(error.message);
+      });
+      return;
+    }
     try {
       const res = await login({ email, password }).unwrap();
       dispatch(setCredentials({ ...res }));
