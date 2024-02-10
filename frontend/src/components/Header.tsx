@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import { CiShoppingCart } from "react-icons/ci";
-import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
 import siteLogo from "../assets/logo.png";
 import useWindowSize from "../hooks/useWindowSize";
+import { logout } from "../store/slices/authSlice";
+import { useLogoutMutation } from "../store/slices/usersApiSlice";
 import ProfileCard from "./ProfileCard";
 import "./header.css";
 
@@ -25,6 +27,19 @@ const Header = () => {
   const { cartItems } = useSelector((state) => state.cart);
   const { userInfo } = useSelector((state) => state.auth);
 
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const [logoutApiCall] = useLogoutMutation();
+  const logoutHandler = async () => {
+    try {
+      await logoutApiCall().unwrap();
+      dispatch(logout());
+      navigate("/login");
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <nav className="relative container mx-auto p-6">
       {/* flex container for all items */}
@@ -60,7 +75,7 @@ const Header = () => {
             )}
           </div>
           {userInfo ? (
-            <ProfileCard user={userInfo} />
+            <ProfileCard user={userInfo} logoutHandler={logoutHandler} />
           ) : (
             <>
               <div className="hover:text-veryDarkViolet">

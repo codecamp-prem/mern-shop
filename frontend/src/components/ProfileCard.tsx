@@ -14,10 +14,9 @@ type Props = {
     email: string;
     admins: number;
   };
+  logoutHandler: () => void;
 };
-const ProfileCard = ({ user }: Props) => {
-  const logoutHandler = () => {};
-
+const ProfileCard = ({ user, logoutHandler }: Props) => {
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
