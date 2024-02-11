@@ -4,6 +4,7 @@ import express, { Express, Request, Response } from "express";
 dotenv.config();
 
 import { errorHandler, notFound } from "./middleware/errorMiddleware";
+import orderRoutes from "./routes/orderRoutes";
 import productRoutes from "./routes/productRoutes";
 import userRoutes from "./routes/userRoutes";
 
@@ -24,6 +25,7 @@ app.get("/", (req: Request, res: Response) => {
 
 app.use("/api/products", productRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/orders", orderRoutes);
 
 /* not found and other error handler */
 app.use(notFound);
