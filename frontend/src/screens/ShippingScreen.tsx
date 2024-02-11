@@ -3,9 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { saveShippingAddress } from "../store/slices/cartSlice";
 
-function classNames(...classes) {
-  return classes.filter(Boolean).join(" ");
-}
 const ShippingScreen = () => {
   const cart = useSelector((state) => state.cart);
   const { shippingAddress } = cart;

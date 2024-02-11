@@ -8,6 +8,7 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import App from "./App.tsx";
+import PrivateRoute from "./components/PrivateRoute.tsx";
 import "./index.css";
 import CartScreen from "./screens/CartScreen.tsx";
 import HomeScreen from "./screens/HomeScreen.tsx";
@@ -26,8 +27,12 @@ const router = createBrowserRouter(
       <Route path="/cart" element={<CartScreen />} />
       <Route path="/login" element={<LoginScreen />} />
       <Route path="/signup" element={<SignUpScreen />} />
-      <Route path="/shipping" element={<ShippingScreen />} />
+
       <Route path="/payment" element={<PaymentScreen />} />
+
+      <Route path="" element={<PrivateRoute />}>
+        <Route path="/shipping" element={<ShippingScreen />} />
+      </Route>
     </Route>
   )
 );
