@@ -12,7 +12,9 @@ import "./index.css";
 import CartScreen from "./screens/CartScreen.tsx";
 import HomeScreen from "./screens/HomeScreen.tsx";
 import LoginScreen from "./screens/LoginScreen.tsx";
+import PaymentScreen from "./screens/PaymentScreen.tsx";
 import ProductScreen from "./screens/ProductScreen.tsx";
+import ShippingScreen from "./screens/ShippingScreen.tsx";
 import SignUpScreen from "./screens/SignUpScreen.tsx";
 import { store } from "./store/store.ts";
 
@@ -24,6 +26,8 @@ const router = createBrowserRouter(
       <Route path="/cart" element={<CartScreen />} />
       <Route path="/login" element={<LoginScreen />} />
       <Route path="/signup" element={<SignUpScreen />} />
+      <Route path="/shipping" element={<ShippingScreen />} />
+      <Route path="/payment" element={<PaymentScreen />} />
     </Route>
   )
 );
